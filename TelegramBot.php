@@ -17,7 +17,7 @@ class TelegramBot
         }
 
         $client = new Client([
-            'base_url' => $url
+            'base_uri' => $url
         ]);
 
         $result = $client->request('GET');
