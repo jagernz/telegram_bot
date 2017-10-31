@@ -48,4 +48,14 @@ class TelegramBot
 
         return $response;
     }
+
+    public function sendPhoto($chat_id, $photo)
+    {
+        $response = $this->query('sendPhoto', [
+            'chat_id' => $chat_id,
+            'photo' => $photo
+        ]);
+
+        return $response;
+    }
 }
