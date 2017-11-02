@@ -1,9 +1,5 @@
 <?php
 
-print_r($_REQUEST);
-
-die();
-
 include('vendor/autoload.php');
 include('TelegramBot.php');
 include('Weather.php');
