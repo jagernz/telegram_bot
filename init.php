@@ -8,6 +8,10 @@ include('WeatherService.php');
 $telegramApi = new TelegramBot();
 $weatherApi = new Weather();
 
+$webhook = $telegramApi->setWebhook();
+var_dump($webhook);
+die();
+
 //while (true) {
 //
 //    sleep(3);
