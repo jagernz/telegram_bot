@@ -12,7 +12,7 @@ class Weather
         $params['q'] = $cityName;
         $params['appid'] = $this->token;
 
-        $url .='?q='.$params['q'].'&appid='.$params['appid'];
+        $url .='?q='.$params['q'].'&appid='.$params['appid'].'&lang=ru';
 
         $client = new \GuzzleHttp\Client([
             'base_uri' => $url
