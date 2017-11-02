@@ -28,15 +28,22 @@ class TelegramBot
 
     public function getUpdates()
     {
-        $responce = $this->query('getUpdates', [
+        $response = $this->query('getUpdates', [
             'offset' => $this->updateId + 1
         ]);
 
-        if (!empty($responce->result)) {
-            $this->updateId = $responce->result[count($responce->result) - 1 ]->update_id;
+        if (!empty($response->result)) {
+            $this->updateId = $response->result[count($response->result) - 1 ]->update_id;
         }
 
-        return $responce->result;
+        return $response->result;
+    }
+
+    public function setWebhook()
+    {
+        $response = $this->query('setWebhook');
+
+        return $response->result;
     }
 
     public function sendMessage($text, $chat_id, $reply = null)
