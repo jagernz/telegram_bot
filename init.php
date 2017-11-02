@@ -1,5 +1,9 @@
 <?php
 
+echo 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+
+die();
+
 include('vendor/autoload.php');
 include('TelegramBot.php');
 include('Weather.php');
@@ -8,9 +12,9 @@ include('WeatherService.php');
 $telegramApi = new TelegramBot();
 $weatherApi = new Weather();
 
-while (true) {
-
-    sleep(3);
+//while (true) {
+//
+//    sleep(3);
 
     $updates = $telegramApi->getUpdates();
 
@@ -92,5 +96,5 @@ while (true) {
 
     }
 
-}
+//}
 
