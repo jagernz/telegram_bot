@@ -1,8 +1,5 @@
 <?php
 
-echo 'проверка';
-die();
-
 include('vendor/autoload.php');
 include('TelegramBot.php');
 include('Weather.php');
