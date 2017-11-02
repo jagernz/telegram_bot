@@ -1,6 +1,6 @@
 <?php
 
-echo 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+print_r($_REQUEST);
 
 die();
 
