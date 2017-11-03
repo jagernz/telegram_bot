@@ -1,112 +1,75 @@
 <?php
 
-$request = file_get_contents('php://input');
-$request = json_decode( $request, TRUE );
-
 include('vendor/autoload.php');
 include('TelegramBot.php');
 include('Weather.php');
 include('WeatherService.php');
+include('Log.php');
 
-use Monolog\Logger;
-use Monolog\Handler\StreamHandler;
+    $chatId  = $request['message']['chat']['id'];
+    $message = $request['message']['text'];
+    $from = $request['message']['from']['first_name'];
 
-// create a log channel
-$log = new Logger('REQUEST_INFO');
-$log->pushHandler(new StreamHandler('app.log', Logger::DEBUG));
+    $telegramApi = new TelegramBot();
+    $weatherApi = new Weather();
 
-// add records to the log
-$log->addDebug(json_encode($request));
 
-//$telegramApi = new TelegramBot();
-//$weatherApi = new Weather();
+    switch ($message) {
 
-//var_dump($_REQUEST);
-die();
+        case '/start':
 
-//while (true) {
-//
-//    sleep(3);
+            $telegramApi->sendMessage(
+                'Привет, '.$from.'! Пиши в каком городе нужна погода!',
+                $chatId
+            );
+            break;
 
-    $updates = $telegramApi->getUpdates();
+        case 'Прикольно!':
 
-    foreach ($updates as $update) {
+            $telegramApi->sendMessage(
+                'Спасибо, Карл! Это мой первенец.',
+                $chatId
+            );
+            break;
 
-        switch ($update->message->text) {
+        case 'Хуйня!':
 
-            case '/start':
+            $telegramApi->sendMessage(
+                'Сам ты хуйня!',
+                $chatId
+            );
+            break;
 
+        default:
+
+            $result = $weatherApi->getWeather($message);
+            if ($result) {
+                $service = new WeatherService($result);
                 $telegramApi->sendMessage(
-                    'Привет, '.$update->message->from->first_name.'! Пиши в каком городе нужна погода!',
-                    $update->message->chat->id
+                    '###### Расчет ссаной погоды ######',
+                    $chatId
                 );
-                break;
-
-            case 'Прикольно!':
-
+                $telegramApi->sendPhoto(
+                    $chatId,
+                    'http://openweathermap.org/img/w/' . $service->getIcon() . '.png'
+                );
                 $telegramApi->sendMessage(
-                    'Спасибо, Карл! Это мой первенец.',
-                    $update->message->chat->id
+                    'Ссаная оценка местности .... '.$service->getWeatherState(),
+                    $chatId
                 );
-                break;
-
-            case 'Хуйня!':
-
                 $telegramApi->sendMessage(
-                    'Сам ты хуйня!',
-                    $update->message->chat->id
+                    'Оценка ссаной температуры .... '.$service->getTemperatureInCelsius().' цельс.',
+                    $chatId
                 );
-                break;
-
-            default:
-
-                $result = $weatherApi->getWeather($update->message->text);
-
-                if ($result) {
-
-                    $service = new WeatherService($result);
-
-//                    print_r($result);
-//                    echo '<hr>';
-
-                    $telegramApi->sendMessage(
-                        '###### Расчет ссаной погоды ######',
-                        $update->message->chat->id
-                    );
-
-                    $telegramApi->sendPhoto(
-                        $update->message->chat->id,
-                        'http://openweathermap.org/img/w/' . $service->getIcon() . '.png'
-                    );
-
-//                    Вставляем сюда инфу от апи погоды
-
-                    $telegramApi->sendMessage(
-                        'Ссаная оценка местности .... '.$service->getWeatherState(),
-                        $update->message->chat->id
-                    );
-
-                    $telegramApi->sendMessage(
-                        'Оценка ссаной температуры .... '.$service->getTemperatureInCelsius().' цельс.',
-                            $update->message->chat->id
-                    );
-
-                    $telegramApi->sendMessage(
-                        'Оценка ссаного ветра .... '.$service->getWindSpeed().'м/с.',
-                            $update->message->chat->id,
-                        ['Прикольно!','Хуйня!']
-                    );
-
-                } else {
-
-                    $telegramApi->sendMessage(
-                        'Ты что ебешь меня, Карл?',
-                            $update->message->chat->id
-                    );
-                }
-        }
-
+                $telegramApi->sendMessage(
+                    'Оценка ссаного ветра .... '.$service->getWindSpeed().'м/с.',
+                    $chatId,
+                    ['Прикольно!','Хуйня!']
+                );
+            } else {
+                $telegramApi->sendMessage(
+                    'Ты что ебешь меня, Карл?',
+                    $chatId
+                );
+            }
     }
-
-//}
-

@@ -43,7 +43,6 @@ class TelegramBot
     {
         $response = $this->query('getWebhookinfo');
 
-//        return $response->result;
         return $response->result;
     }
 
