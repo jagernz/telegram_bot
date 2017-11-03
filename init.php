@@ -1,6 +1,7 @@
 <?php
 
-$data = json_encode($_REQUEST);
+$request = file_get_contents('php://input');
+$request = json_decode( $request, TRUE );
 
 include('vendor/autoload.php');
 include('TelegramBot.php');
@@ -15,7 +16,7 @@ $log = new Logger('REQUEST_INFO');
 $log->pushHandler(new StreamHandler('app.log', Logger::DEBUG));
 
 // add records to the log
-$log->addDebug($data);
+$log->addDebug($request);
 
 //$telegramApi = new TelegramBot();
 //$weatherApi = new Weather();
