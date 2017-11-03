@@ -1,14 +1,26 @@
 <?php
 
+$data = json_encode($_REQUEST);
+
 include('vendor/autoload.php');
 include('TelegramBot.php');
 include('Weather.php');
 include('WeatherService.php');
 
-$telegramApi = new TelegramBot();
-$weatherApi = new Weather();
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
 
-var_dump($_REQUEST);
+// create a log channel
+$log = new Logger('REQUEST_INFO');
+$log->pushHandler(new StreamHandler('app.log', Logger::DEBUG));
+
+// add records to the log
+$log->addDebug($data);
+
+//$telegramApi = new TelegramBot();
+//$weatherApi = new Weather();
+
+//var_dump($_REQUEST);
 die();
 
 //while (true) {
