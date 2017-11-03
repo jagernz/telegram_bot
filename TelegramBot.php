@@ -39,11 +39,12 @@ class TelegramBot
         return $response->result;
     }
 
-    public function setWebhook()
+    public function getWebhookinfo()
     {
-        $response = $this->query('setWebhook');
+        $response = $this->query('getWebhookinfo');
 
-        return $response->result;
+//        return $response->result;
+        return $response;
     }
 
     public function sendMessage($text, $chat_id, $reply = null)
