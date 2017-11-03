@@ -16,7 +16,7 @@ $log = new Logger('REQUEST_INFO');
 $log->pushHandler(new StreamHandler('app.log', Logger::DEBUG));
 
 // add records to the log
-$log->addDebug($request);
+$log->addDebug(json_encode($request));
 
 //$telegramApi = new TelegramBot();
 //$weatherApi = new Weather();
